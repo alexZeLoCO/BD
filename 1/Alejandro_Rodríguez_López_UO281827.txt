@@ -1,0 +1,89 @@
+/**
+ * 
+ * UO281827 // Rodríguez López, Alejandro.
+ /*
+ 
+TAREAS
+1. Añadir a la tabla EMPLEADOS los campos (usar ALTER TABLE): Apellidos
+VARCHAR (20), FechaNacimiento DATE, Calle VARCHAR (20), Ciudad
+VARCHAR (20) y Sueldo INTEGER.
+ALTER TABLE empleados ADD COLUMN apellidos VARCHAR(20) ,ADD
+COLUMN FechaNacimiento DATE , ADD COLUMN Calle VARCHAR(20),
+ADD COLUMN Ciudad VARCHAR(20) , ADD COLUMN Sueldo INTEGER;
+
+2. Añadir la tabla DEPARTAMENTOS con los campos (usar CREATE TABLE): Id_dpto y Nombre
+prueba=# CREATE TABLE departamentos (Id_dpto integer PRIMARY KEY, Nombre varchar(20));
+CREATE TABLE
+
+a. Añadir el departamento con id_dpto 1 (usar INSERT INTO)
+prueba=# INSERT INTO departamentos (Id_dpto) VALUES (1);
+INSERT 0 1
+
+b. Añadir el departamento con id_dpto 2 (usar INSERT INTO)
+INSERT INTO departamentos (Id_dpto) VALUES (2);
+INSERT 0 1
+
+3. ¿Cómo podemos asignar UN departamento a CADA empleado (asociación 1 : N) ?
+a. Recordatorio de cómo se hace con ACCESS:
+i. Crear la tabla Empleados en Vista Diseño (DNI, nombre, dpto)
+ii. Crear la tabla Departamentos en Vista Diseño (id_dpto,
+nom_dpto)
+iii. Ir a Relaciones y definir la integridad referencial (foreign key)
+arrastrando dpto de la tabla departamentos a id_dpto de la
+tabla de partamentos.
+b. Con Postgres :
+i. Añadir a la tabla empleado la columna Id_Dpto INTEGER
+(usar ALTER TABLE)
+prueba=# ALTER TABLE empleados ADD COLUMN Id_dpto INTEGER;
+ALTER TABLE
+
+ii. Añadir a la tabla empleado la restricción de tabla FOREIGN
+KEY a Id_Dpto (usar ALTER TABLE)
+prueba=# ALTER TABLE empleados ADD FOREIGN KEY (Id_dpto) REFERENCES departamentos(Id_dpto);
+ALTER TABLE
+
+c. Modificar al empleado con DNI 1 el valor de Id_dpto a 1 (usar
+UPDATE)
+prueba=# UPDATE empleados set Id_dpto=1 WHERE dni=1;
+UPDATE 1
+
+d. Modificar al empleado con DNI 2 el valor de Id_dpto a 1 (usar
+UPDATE)
+prueba=# UPDATE empleados set Id_dpto=1 WHERE dni=2;
+UPDATE 1
+
+e. Modificar al empleado con DNI 3 el valor de Id_dpto a 2 (usar
+UPDATE)
+prueba=# UPDATE empleados set Id_dpto=2 WHERE dni=3;
+UPDATE 1
+
+f. ¿Qué pasa si al empleado con DNI 4 le intento poner el valor de
+id_dpto a 3?
+prueba=# UPDATE empleados set Id_dpto=3 WHERE dni=4;
+ERROR:  inserción o actualización en la tabla «empleados» viola la llave foránea «empleados_id_dpto_fkey»
+DETALLE:  La llave (id_dpto)=(3) no está presente en la tabla «departamentos».
+
+// (Retorna un error, el departamento con Id_dpto = 3 no existe.
+
+g. Realizar las consultas sencillas propuestas en clase.
+i. Obtener el id_dpto, nombre de sus empleados.
+prueba=# SELECT empleados.nombre, empleados.id_dpto FROM empleados;
+    nombre    | id_dpto
+--------------+---------
+ MARIA        |
+ Mario        |
+ Maria        |       1
+ Juan         |       1
+ Maria Josefa |       2
+(5 filas)
+
+ii. Obtener los DNI de los empleados junto con el nombre del departamento al que pertenecen.
+prueba=# SELECT empleados.dni, departamentos.nombre FROM empleados LEFT JOIN departamentos ON empleados.id_dpto = departamentos.id_dpto;
+ dni |   nombre
+-----+-------------
+   4 |
+   5 |
+   1 | Informatica
+   2 | Informatica
+   3 | Energia
+(5 filas)
