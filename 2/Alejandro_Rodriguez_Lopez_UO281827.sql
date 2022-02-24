@@ -10,7 +10,7 @@ CREATE TABLE memoria (mem_id VARCHAR(20) UNIQUE NOT NULL PRIMARY KEY,
 	
 CREATE TABLE disco (disco_id VARCHAR(20) UNIQUE NOT NULL PRIMARY KEY,
 	disco_fabricante VARCHAR(20),
-	disco_capacidad VARCHAR(20)
+	disco_capacidad INTEGER
 	);
 
 CREATE TABLE tgrafica (tgraf_id VARCHAR(20) UNIQUE NOT NULL PRIMARY KEY,
