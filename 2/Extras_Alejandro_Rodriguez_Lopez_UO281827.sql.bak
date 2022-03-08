@@ -1,5 +1,5 @@
 /* Cosulta 1: Sin unión */
-SELECT pcid, cpu_tipo, mem_tipo, precio
+SELECT pcid, cpu_tipo mem_tipo, precio
 FROM pc
 LEFT JOIN cpu ON cpu.cpu_id = pc.cpu
 LEFT JOIN memoria ON memoria.mem_id = pc.memoria
@@ -9,7 +9,7 @@ AND pc.precio < 1050
 OR disco.disco_capacidad < 400;
 
 /* Consulta 2: Con unión */
-SELECT pcid, cpu_tipo, mem_tipo, precio
+SELECT pcid, cpu_tipo mem_tipo, precio
 FROM pc
 LEFT JOIN cpu ON cpu.cpu_id = pc.cpu
 LEFT JOIN memoria ON memoria.mem_id = pc.memoria
