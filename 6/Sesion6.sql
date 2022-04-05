@@ -156,6 +156,7 @@ $$ language plpgsql;
 
 -- 3.2
 create procedure getEstudiantesIngenieriaIndustrial() as $$
+declare r record;
 begin
 	for r in
 	select estudiante_nombre, estudiante_apellidos from estudiante est
