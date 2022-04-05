@@ -145,6 +145,19 @@ begin
 end;
 $$ language plpgsql;
 
+-- 2.3
+create or replace function getGradoMinEstudiantes()
+returns table (grado_nombre varchar(100), cantidad bigint) as $$
+begin
+	return query
+	select gra.grado_nombre, count(*) from grado gra inner join
+	estudiante_grado_modulo using(grado_id) inner join modulo mod
+	using(modulo_id) group by grado_id having (count(*)) <= all
+	(select count(*) from grado gra inner join estudiante_grado_modulo using
+	(grado_id) inner join modulo using(modulo_id) group by gra.grado_id);
+end;
+$$ language plpgsql;
+
 -- 3.1
 create procedure getCapacidadTotalAula(inout nAsientos int) as $$
 begin

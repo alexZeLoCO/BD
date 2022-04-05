@@ -171,3 +171,23 @@ begin
 	end loop;
 end;
 $$ language plpgsql;
+
+-- 3.3
+create or replace procedure getProfesoresComputacionNoAlgoritmia (n int) as $$
+declare r record;
+begin
+	for r in
+		(select profesor_nombre, profesor_apellidos from profesor pro
+		inner join departamento dep using(departamento_id)
+		where dep.departamento_nombre= 'Ciencias de la Computacion'
+		except
+		select profesor_nombre, profesor_apellidos from profesor pro
+		inner join modulo_profesor_aula mpa using(profesor_id)
+		inner join modulo mod using(modulo_id)
+		where lower(mod.modulo_nombre)='algoritmia')
+		LIMIT(n)
+	loop
+		raise notice '(%, %)', r.profesor_nombre, r.profesor_apellidos;
+	end loop;
+end;
+$$ language plpgsql;
